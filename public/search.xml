@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2018/04/20/hello-world/"/>
+      <url>/2018/04/20/hello-world/</url>
+      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      
+      
+    </entry>
+    
+    <entry>
+      <title>Softmax 梯度下降优化</title>
+      <link href="/2018/04/20/Softmax/"/>
+      <url>/2018/04/20/Softmax/</url>
+      <content type="html"><![CDATA[<h2 id="softmax函数简介："><a href="#softmax函数简介：" class="headerlink" title="softmax函数简介："></a>softmax函数简介：</h2><p>&emsp;&emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1<em>N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C</em>N(其中C为类别数，N为样本数)。<br><img src="/images/1524209707955.png" alt="image"><br>&emsp;&emsp; 当我们给softmax输入一个样本Xi其输出格式为softmax(Xi) = [s1,s2,……,sC]，其中s1对应类别1的概率值，s2对应类别2的概率值，依次类推到sC。softmax的过程如下:<br><img src="/images/1524203488388.png" alt="image"><br>然后来衡量第i个样本的loss公式如下：<br><img src="/images/1524205811631.png" alt="image">（其中yi表示第i个样本对应的类别）<br>所以N个样本的loss为：<br><img src="/images/1524205761034.png" alt="image"><br>加上正则化后为：<br><img src="/images/1524205687396.png" alt="image"><br>由如下Z和W与X的关系：<br><img src="/images/1524208472965.png" alt="image"><br>则可以把loss函数化成全部关于w的函数为：<br><img src="/images/1524206164702.png" alt="image"><br>现在我们来求softmax的导数，现在我们先对一个样本的导数进行求解，先把Li花简为如下形式：<br><img src="/images/1524206564344.png" alt="image"><br>则当对Wyi求导的时候（j==yi）：<br><img src="/images/1524206933385.png" alt="image"><br>当对Wj求导的时候（j！=yi）<br><img src="/images/1524206992830.png" alt="image"><br>则如上操作可以求出单个loss的梯度如下(其中设yi=2)：<br><img src="/images/1524207290063.png" alt="image"><br>现在我们需要把所有的梯度求出来并做一个平均就得到了loss的平均梯度：<br><img src="/images/1524207442115.png" alt="image"><br>加上正则化后的loss函数：<br><img src="/images/1524207513644.png" alt="image"><br>然后在足够的迭代次数中用梯度更新W（其中α为学习率）：<br><img src="/images/1524207624590.png" alt="image"><br>直到在达到足够的迭代次数或者loss足够小的时候则停止更新<br>此时得到的W则为我们在这个softmax中所得到的W，然后在测试集中测试所有样本可得到样本的预测类别。</p>]]></content>
+      
+      
+    </entry>
+    
+  
+  
+</search>
