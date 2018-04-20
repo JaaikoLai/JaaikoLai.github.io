@@ -1,7 +1,13 @@
 # Hexo Configuration
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
-
+# Header Menu
+menu:
+  Home: /
+  Archives: /archives
+  # change github and email values to your own info
+  Github: https://github.com/JaaikoLai
+  Email: lyhhap@163.com
 # Site
 title: MyBlog
 subtitle:
@@ -32,7 +38,8 @@ skip_render:
 new_post_name: :title.md # File name of new posts
 default_layout: post
 titlecase: false # Transform title into titlecase
-external_link: true # Open external links in new tab
+
+xternal_link: true # Open external links in new tab
 filename_case: 0
 render_drafts: false
 post_asset_folder: false
