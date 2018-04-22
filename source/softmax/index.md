@@ -1,4 +1,6 @@
 ---
 title: softmax
-date: 2018-04-19 12:32:11
+date: 2018-01-19 12:32:11
+tags: 
+- softmax
 ---
