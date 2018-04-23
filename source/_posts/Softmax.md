@@ -1,6 +1,7 @@
 ---
 title: Softmax 梯度下降优化
-tags: []
+tags:
+  - Softmax
 categories: []
 date: 2018-04-20 13:21:17
 ---
@@ -16,11 +17,12 @@ date: 2018-04-20 13:21:17
 所以N个样本的loss为：
 ![image](/images/1524205761034.png)
 加上正则化后为：
-![image](/images/1524205687396.png)
+![image](/images/1524449673188.png)
 由如下Z和W与X的关系：
 ![image](/images/1524368247375.png)
+
 则可以把loss函数化成全部关于w的函数为：
-![image](/images/1524206164702.png)
+![image](/images/1524450300358.png)
 现在我们来求softmax的导数，现在我们先对一个样本的导数进行求解，先把Li花简为如下形式：
 ![image](/images/1524206564344.png)
 则当对Wyi求导的时候（j==yi）：
