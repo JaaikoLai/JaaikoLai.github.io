@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Softmax," />
 
 
 
@@ -80,6 +80,7 @@
 
 
 <meta name="description" content="softmax函数简介：&amp;emsp;&amp;emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为CN(其中C为类别数，N为样本数)。&amp;emsp;&amp;emsp; 当我们给softmax输入一个样本Xi其输出格式为softm">
+<meta name="keywords" content="Softmax">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Softmax 梯度下降优化">
 <meta property="og:url" content="http://yoursite.com/2018/04/20/Softmax/index.html">
@@ -90,9 +91,9 @@
 <meta property="og:image" content="http://yoursite.com/images/1524203488388.png">
 <meta property="og:image" content="http://yoursite.com/images/1524205811631.png">
 <meta property="og:image" content="http://yoursite.com/images/1524205761034.png">
-<meta property="og:image" content="http://yoursite.com/images/1524205687396.png">
+<meta property="og:image" content="http://yoursite.com/images/1524449673188.png">
 <meta property="og:image" content="http://yoursite.com/images/1524368247375.png">
-<meta property="og:image" content="http://yoursite.com/images/1524206164702.png">
+<meta property="og:image" content="http://yoursite.com/images/1524450300358.png">
 <meta property="og:image" content="http://yoursite.com/images/1524206564344.png">
 <meta property="og:image" content="http://yoursite.com/images/1524206933385.png">
 <meta property="og:image" content="http://yoursite.com/images/1524206992830.png">
@@ -100,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/1524207442115.png">
 <meta property="og:image" content="http://yoursite.com/images/1524207513644.png">
 <meta property="og:image" content="http://yoursite.com/images/1524207624590.png">
-<meta property="og:updated_time" content="2018-04-22T03:38:03.770Z">
+<meta property="og:updated_time" content="2018-04-23T02:56:09.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Softmax 梯度下降优化">
 <meta name="twitter:description" content="softmax函数简介：&amp;emsp;&amp;emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为CN(其中C为类别数，N为样本数)。&amp;emsp;&amp;emsp; 当我们给softmax输入一个样本Xi其输出格式为softm">
@@ -334,7 +335,8 @@
       
 
       
-        <h2 id="softmax函数简介："><a href="#softmax函数简介：" class="headerlink" title="softmax函数简介："></a>softmax函数简介：</h2><p>&emsp;&emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1<em>N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C</em>N(其中C为类别数，N为样本数)。<br><img src="/images/1524209707955.png" alt="image"><br>&emsp;&emsp; 当我们给softmax输入一个样本Xi其输出格式为softmax(Xi) = [s1,s2,……,sC]，其中s1对应类别1的概率值，s2对应类别2的概率值，依次类推到sC。softmax的过程如下:<br><img src="/images/1524203488388.png" alt="image"><br>然后来衡量第i个样本的loss公式如下：<br><img src="/images/1524205811631.png" alt="image">（其中yi表示第i个样本对应的类别）<br>所以N个样本的loss为：<br><img src="/images/1524205761034.png" alt="image"><br>加上正则化后为：<br><img src="/images/1524205687396.png" alt="image"><br>由如下Z和W与X的关系：<br><img src="/images/1524368247375.png" alt="image"><br>则可以把loss函数化成全部关于w的函数为：<br><img src="/images/1524206164702.png" alt="image"><br>现在我们来求softmax的导数，现在我们先对一个样本的导数进行求解，先把Li花简为如下形式：<br><img src="/images/1524206564344.png" alt="image"><br>则当对Wyi求导的时候（j==yi）：<br><img src="/images/1524206933385.png" alt="image"><br>当对Wj求导的时候（j！=yi）<br><img src="/images/1524206992830.png" alt="image"><br>则如上操作可以求出单个loss的梯度如下(其中设yi=2)：<br><img src="/images/1524207290063.png" alt="image"><br>现在我们需要把所有的梯度求出来并做一个平均就得到了loss的平均梯度：<br><img src="/images/1524207442115.png" alt="image"><br>加上正则化后的loss函数：<br><img src="/images/1524207513644.png" alt="image"><br>然后在足够的迭代次数中用梯度更新W（其中α为学习率）：<br><img src="/images/1524207624590.png" alt="image"><br>直到在达到足够的迭代次数或者loss足够小的时候则停止更新<br>此时得到的W则为我们在这个softmax中所得到的W，然后在测试集中测试所有样本可得到样本的预测类别。</p>
+        <h2 id="softmax函数简介："><a href="#softmax函数简介：" class="headerlink" title="softmax函数简介："></a>softmax函数简介：</h2><p>&emsp;&emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1<em>N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C</em>N(其中C为类别数，N为样本数)。<br><img src="/images/1524209707955.png" alt="image"><br>&emsp;&emsp; 当我们给softmax输入一个样本Xi其输出格式为softmax(Xi) = [s1,s2,……,sC]，其中s1对应类别1的概率值，s2对应类别2的概率值，依次类推到sC。softmax的过程如下:<br><img src="/images/1524203488388.png" alt="image"><br>然后来衡量第i个样本的loss公式如下：<br><img src="/images/1524205811631.png" alt="image">（其中yi表示第i个样本对应的类别）<br>所以N个样本的loss为：<br><img src="/images/1524205761034.png" alt="image"><br>加上正则化后为：<br><img src="/images/1524449673188.png" alt="image"><br>由如下Z和W与X的关系：<br><img src="/images/1524368247375.png" alt="image"></p>
+<p>则可以把loss函数化成全部关于w的函数为：<br><img src="/images/1524450300358.png" alt="image"><br>现在我们来求softmax的导数，现在我们先对一个样本的导数进行求解，先把Li花简为如下形式：<br><img src="/images/1524206564344.png" alt="image"><br>则当对Wyi求导的时候（j==yi）：<br><img src="/images/1524206933385.png" alt="image"><br>当对Wj求导的时候（j！=yi）<br><img src="/images/1524206992830.png" alt="image"><br>则如上操作可以求出单个loss的梯度如下(其中设yi=2)：<br><img src="/images/1524207290063.png" alt="image"><br>现在我们需要把所有的梯度求出来并做一个平均就得到了loss的平均梯度：<br><img src="/images/1524207442115.png" alt="image"><br>加上正则化后的loss函数：<br><img src="/images/1524207513644.png" alt="image"><br>然后在足够的迭代次数中用梯度更新W（其中α为学习率）：<br><img src="/images/1524207624590.png" alt="image"><br>直到在达到足够的迭代次数或者loss足够小的时候则停止更新<br>此时得到的W则为我们在这个softmax中所得到的W，然后在测试集中测试所有样本可得到样本的预测类别。</p>
 
       
     </div>
@@ -350,11 +352,33 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Softmax/" rel="tag"># Softmax</a>
+          
+        </div>
+      
 
       
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/22/untitled-1524399289664/" rel="prev" title="test">
+                test <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -428,7 +452,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -436,6 +460,15 @@
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -665,6 +698,8 @@
   
 
   
+  
+
 
   
 
