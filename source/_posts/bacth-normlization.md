@@ -47,7 +47,7 @@ X_{2j}\\\\
 X_{mj}
 \end{bmatrix}\\\\$$
 #### (1)求dbeta
-$$我们先求d\beta_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot dY_{ij}{d\beta_{j}}，
+$$我们先求d\beta_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot \frac{dY_{ij}}{d\beta_{j}}，
 由Y_{i} = \gamma  \times \hat{X_{i}} + \beta可知Y_{ij} = \gamma_{j}  \times \hat{X_{ij}} + \beta_{j}，\frac{dY_{ij}}{d\beta_{j}}=1\\\\
 所以d\beta_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}}，则对整个矩阵操作d\beta = \sum_{i=1}^{m}\frac{dL}{dY_{i}} = \begin{bmatrix}
  d\beta_{1}& d\beta_{2} & ... &d\beta_{D} \\\\ 
