@@ -57,8 +57,7 @@ $$
 d\gamma_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot \frac{dY_{ij}}{d\gamma_{j}}\\\\
 由Y_{i} = \gamma  \times \hat{X_{i}} + \beta可知Y_{ij} = \gamma_{j}  \times \hat{X_{ij}} + \beta_{j}，\frac{dY_{ij}}{d\gamma_{j}}=\hat{X_{ij}}\\\\
 所以d\gamma_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot \hat{X_{ij}}\\\\
-对整个矩阵进行操作d\gamma = \sum_{i=1}^{m}\frac{dL}{dY_{i}} \cdot \hat{X_{i}} = \begin{bmatrix}
- d\gamma_{1}& d\gamma_{2} & ... &d\gamma_{D} \\\\ 
+对整个矩阵进行操作d\gamma = \sum_{i=1}^{m}\frac{dL}{dY_{i}} \cdot \hat{X_{i}} = \begin{bmatrix} d\gamma_{1}& d\gamma_{2} & ... &d\gamma_{D} 
 \end{bmatrix}$$
 #### (3)求dX
 最后我们还要对X进行求导，首先我们先看下面的链式路径：

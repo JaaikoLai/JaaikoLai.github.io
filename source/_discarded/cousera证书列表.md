@@ -1,7 +1,8 @@
 title: cousera证书列表
 author: Lai
-date: 2018-05-11 15:07:52
-tags:
+tags: []
+categories: []
+date: 2018-05-11 15:07:00
 ---
 Neural Networks and Deep Learning
 https://www.coursera.org/account/accomplishments/records/ZGDZWB6ZSMJ9
