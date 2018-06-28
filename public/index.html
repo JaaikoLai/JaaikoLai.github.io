@@ -252,6 +252,128 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/28/Multiclass Support Vector Machine/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/28/Multiclass Support Vector Machine/" itemprop="url">Multiclass Support Vector Machine</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-28T10:39:00+08:00">
+                2018-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>多分类支持向量机可以用来处理多分类问题，其分类函数可以给每一个类得到一个分数值，从而从数值上了解哪个类别的分数高低，其损失函数也是通过某个特定的阈值来优化从而使得模型在正确类别上得到一个比其他类别更高的分数值。</p>
+<h4 id="loss函数-设定有C个类别"><a href="#loss函数-设定有C个类别" class="headerlink" title="loss函数(设定有C个类别)"></a>loss函数(设定有C个类别)</h4><p>$$s = [s_1, s_2, …, s_C] = f(x_i, W) = [f(x_i, W)_1, f(x_i, W)_2, … ,f(x_i, W)_C]$$<br>$$L_i = \sum_{j\neq y_i} \max(0, s_j - s_{y_i} + \Delta)$$<br>$$L =  \frac{1}{N} \sum_i L_i  +  \lambda R(W)$$<br>$$L = \frac{1}{N} \sum_i \sum_{j\neq y_i} \left[ \max(0, f(x_i; W)_j - f(x_i; W)_{y_i} + \Delta) \right] + \lambda \sum_k\sum_l W_{k,l}^2$$</p>
+<h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><p>$$s = W^Tx_i$$<br>$$j==yi时：\frac{dL_i}{dW_{y_i}} = -\sum_{j\neq y_i}\mathbb{I}(W^T_jx_i - W^T_{y_i}x_i + \Delta&gt;0)$$<br>$$j！=i时：\frac{dL_i}{dW_yi} = \mathbb{I}(W^T_jx_i - W^T_{y_i}x_i + \Delta&gt;0)$$<br>$$\frac{dL}{dW} = \frac{1}{N}\sum^N_{i=1}\frac{dL_i}{dW} + 2\lambda W$$<br>$$执行 W = W - \alpha \frac{dL}{dW},在根据W求s，然后求loss，最后优化得到较理想的W值$$</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/28/bacth-normlization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -659,7 +781,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
