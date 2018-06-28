@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Softmax," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="softmax函数简介：&amp;emsp;&amp;emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1 x N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C x N(其中C为类别数，N为样本数)。&amp;emsp;&amp;emsp; 当我们给softmax输入一个样本Xi其输出格式">
+<meta name="keywords" content="Softmax">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Softmax 梯度下降优化">
+<meta property="og:url" content="http://yoursite.com/2018/04/20/Softmax/index.html">
+<meta property="og:site_name" content="Lai&#39;s blog">
+<meta property="og:description" content="softmax函数简介：&amp;emsp;&amp;emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1 x N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C x N(其中C为类别数，N为样本数)。&amp;emsp;&amp;emsp; 当我们给softmax输入一个样本Xi其输出格式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/1524209707955.png">
+<meta property="og:image" content="http://yoursite.com/images/1524203488388.png">
+<meta property="og:image" content="http://yoursite.com/images/1524205811631.png">
+<meta property="og:image" content="http://yoursite.com/images/1524205761034.png">
+<meta property="og:image" content="http://yoursite.com/images/1524449673188.png">
+<meta property="og:image" content="http://yoursite.com/images/1524368247375.png">
+<meta property="og:image" content="http://yoursite.com/images/1524450300358.png">
+<meta property="og:image" content="http://yoursite.com/images/1524206564344.png">
+<meta property="og:image" content="http://yoursite.com/images/1524206933385.png">
+<meta property="og:image" content="http://yoursite.com/images/1524206992830.png">
+<meta property="og:image" content="http://yoursite.com/images/1524207290063.png">
+<meta property="og:image" content="http://yoursite.com/images/1524207442115.png">
+<meta property="og:image" content="http://yoursite.com/images/1524207513644.png">
+<meta property="og:image" content="http://yoursite.com/images/1524207624590.png">
+<meta property="og:updated_time" content="2018-06-28T02:25:40.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Softmax 梯度下降优化">
+<meta name="twitter:description" content="softmax函数简介：&amp;emsp;&amp;emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1 x N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C x N(其中C为类别数，N为样本数)。&amp;emsp;&amp;emsp; 当我们给softmax输入一个样本Xi其输出格式">
+<meta name="twitter:image" content="http://yoursite.com/images/1524209707955.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/20/Softmax/"/>
+
+
+
+
+
+  <title>Softmax 梯度下降优化 | Lai's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/Softmax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Softmax 梯度下降优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T13:21:00+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="softmax函数简介："><a href="#softmax函数简介：" class="headerlink" title="softmax函数简介："></a>softmax函数简介：</h2><p>&emsp;&emsp; softmax函数是用来处理多分类的一种软性分类器，它输出的是每个类别的概率值。数据集特征矩阵为X其维度为D+1 x N（其中D+1为原本样本的特征维度数D加上bias的维度后的维度数，所以为D+1，N为样本数），标注矩阵为Y，维度为C x N(其中C为类别数，N为样本数)。<br><img src="/images/1524209707955.png" alt="image"><br>&emsp;&emsp; 当我们给softmax输入一个样本Xi其输出格式为softmax(Xi) = [s1,s2,……,sC]，其中s1对应类别1的概率值，s2对应类别2的概率值，依次类推到sC。softmax的过程如下:<br><img src="/images/1524203488388.png" alt="image"><br>然后来衡量第i个样本的loss公式如下：<br><img src="/images/1524205811631.png" alt="image">（其中yi表示第i个样本对应的类别）<br>所以N个样本的loss为：<br><img src="/images/1524205761034.png" alt="image"><br>加上正则化后为：<br><img src="/images/1524449673188.png" alt="image"><br>由如下Z和W与X的关系：<br><img src="/images/1524368247375.png" alt="image"></p>
+<p>则可以把loss函数化成全部关于w的函数为：<br><img src="/images/1524450300358.png" alt="image"><br>现在我们来求softmax的导数，现在我们先对一个样本的导数进行求解，先把Li化简为如下形式：<br><img src="/images/1524206564344.png" alt="image"><br>则当对Wyi求导的时候（j==yi）：<br><img src="/images/1524206933385.png" alt="image"><br>当对Wj求导的时候（j！=yi）<br><img src="/images/1524206992830.png" alt="image"><br>则如上操作可以求出单个loss的梯度如下(其中设yi=2)：<br><img src="/images/1524207290063.png" alt="image"><br>现在我们需要把所有的梯度求出来并做一个平均就得到了loss的平均梯度：<br><img src="/images/1524207442115.png" alt="image"><br>加上正则化后的loss函数：<br><img src="/images/1524207513644.png" alt="image"><br>然后在足够的迭代次数中用梯度更新W（其中α为学习率）：<br><img src="/images/1524207624590.png" alt="image"><br>直到在达到足够的迭代次数或者loss足够小的时候则停止更新<br>此时得到的W则为我们在这个softmax中所得到的W，然后在测试集中测试所有样本可得到样本的预测类别。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Softmax/" rel="tag"># Softmax</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/22/neural_network/" rel="prev" title="全连接神经网络">
+                全连接神经网络 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Lai" />
+            
+              <p class="site-author-name" itemprop="name">Lai</p>
+              <p class="site-description motion-element" itemprop="description">Thanks for visiting my blog, lucky one!!!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#softmax函数简介："><span class="nav-number">1.</span> <span class="nav-text">softmax函数简介：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lai</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

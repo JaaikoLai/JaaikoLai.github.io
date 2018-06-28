@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="bacth normlization中的前向传播input:X_{ij}(本层所有的样本矩阵为X维度为mxD，m为样本数，D为神经元的个数，其中X_{ij}为X中的某一个样本)$$其中样本矩阵X = \begin{bmatrix} X_{11}&amp;amp; X_{12} &amp;amp; … &amp;amp;X_{1D} \\X_{21}&amp;amp; X_{22} &amp;amp; … &amp;amp;X_{2D} \\ .">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bacth normlization">
+<meta property="og:url" content="http://yoursite.com/2018/04/28/bacth-normlization/index.html">
+<meta property="og:site_name" content="Lai&#39;s blog">
+<meta property="og:description" content="bacth normlization中的前向传播input:X_{ij}(本层所有的样本矩阵为X维度为mxD，m为样本数，D为神经元的个数，其中X_{ij}为X中的某一个样本)$$其中样本矩阵X = \begin{bmatrix} X_{11}&amp;amp; X_{12} &amp;amp; … &amp;amp;X_{1D} \\X_{21}&amp;amp; X_{22} &amp;amp; … &amp;amp;X_{2D} \\ .">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/chain_batchnorm.png">
+<meta property="og:updated_time" content="2018-06-28T02:25:40.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bacth normlization">
+<meta name="twitter:description" content="bacth normlization中的前向传播input:X_{ij}(本层所有的样本矩阵为X维度为mxD，m为样本数，D为神经元的个数，其中X_{ij}为X中的某一个样本)$$其中样本矩阵X = \begin{bmatrix} X_{11}&amp;amp; X_{12} &amp;amp; … &amp;amp;X_{1D} \\X_{21}&amp;amp; X_{22} &amp;amp; … &amp;amp;X_{2D} \\ .">
+<meta name="twitter:image" content="http://yoursite.com/images/chain_batchnorm.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/28/bacth-normlization/"/>
+
+
+
+
+
+  <title>bacth normlization | Lai's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lai's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/28/bacth-normlization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lai's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bacth normlization</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T16:38:00+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="bacth-normlization中的前向传播"><a href="#bacth-normlization中的前向传播" class="headerlink" title="bacth normlization中的前向传播"></a>bacth normlization中的前向传播</h2><p>input:X_{ij}(本层所有的样本矩阵为X维度为mxD，m为样本数，D为神经元的个数，其中X_{ij}为X中的某一个样本)<br>$$其中样本矩阵X = \begin{bmatrix}<br> X_{11}&amp; X_{12} &amp; … &amp;X_{1D} \\<br>X_{21}&amp; X_{22} &amp; … &amp;X_{2D} \\<br> .&amp; . &amp;  …&amp;. \\<br> .&amp;  .&amp; … &amp; .\\<br>X_{m1}&amp; X_{m2} &amp; … &amp;X_{mD}<br>\end{bmatrix},X_{i} = \begin{bmatrix}<br> X_{i1}&amp; X_{i2} &amp; … &amp;X_{iD} \\<br>\end{bmatrix},第j列为X_{\cdot j} = \begin{bmatrix}<br> X_{1j}\\<br>X_{2j}\\<br> .\\<br> .\\<br>X_{mj}<br>\end{bmatrix}$$<br>$$ output格式为: Yi = BN(X_{ij}, \gamma, \beta)\\<br>其中输出矩阵Y = \begin{bmatrix}<br> Y_{11}&amp; Y_{12} &amp; … &amp;Y_{1D} \\<br>Y_{21}&amp; Y_{22} &amp; … &amp;Y_{2D} \\<br> .&amp; . &amp;  …&amp;. \\<br> .&amp;  .&amp; … &amp; .\\<br>Y_{m1}&amp; Y_{m2} &amp; … &amp;Y_{mD}<br>\end{bmatrix}，m为样本数，D为输入维度数$$<br>前向传播过程如下<br>$$\mu_{j} = E(X) = \frac{1}{m}\sum_{i=1}^{m}X_{i}，则\mu_{j} 的维度为(1,D)\\<br>\sigma_{j}^{2} = Var(X) = \frac{1}{m}\sum_{i=1}^{m}(X_{i}-\mu_{j})^{2}，则\sigma_{j}^{2}的维度为(1,D)\\<br>对第i个样本的估计\hat{X_{ij}} = \frac{X_{ij} - \mu_{j}}{\sqrt{\sigma_{j}^{2} + \varepsilon }}，则\hat{X_{i}}维度为(1,D)\\<br>对m个样本估计\hat{X} = \frac{X - \mu_{j}}{\sqrt{\sigma_{j}^{2} + \varepsilon }}，则\hat{X}维度为(m,D)\\<br>第i个样本的输出Y_{i} = \gamma  \times \hat{X_{i}} + \beta，其中\gamma维度为(1,D),\beta维度为(1,D),则Y_{i}维度为(1,D)\\<br>则m个样本的输出Y = \gamma  \times \hat{X} + \beta，其中\gamma维度为(1,D),\beta维度为(1,D),则Y维度为(m,D)$$</p>
+<h2 id="bacth-normlization中的反向传播"><a href="#bacth-normlization中的反向传播" class="headerlink" title="bacth normlization中的反向传播"></a>bacth normlization中的反向传播</h2><p>$$假设上层梯度为\frac{dL}{dY}，本层输入为X，过程如下：\\<br>从X中选中第j列，令x = \begin{bmatrix}<br> X_{1j}\\<br>X_{2j}\\<br> .\\<br> .\\<br>X_{mj}<br>\end{bmatrix}\\$$</p>
+<h4 id="1-求dbeta"><a href="#1-求dbeta" class="headerlink" title="(1)求dbeta"></a>(1)求dbeta</h4><p>$$我们先求d\beta_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot \frac{dY_{ij}}{d\beta_{j}}，<br>由Y_{i} = \gamma  \times \hat{X_{i}} + \beta可知Y_{ij} = \gamma_{j}  \times \hat{X_{ij}} + \beta_{j}，\frac{dY_{ij}}{d\beta_{j}}=1\\<br>所以d\beta_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}}，则对整个矩阵操作d\beta = \sum_{i=1}^{m}\frac{dL}{dY_{i}} = \begin{bmatrix}<br> d\beta_{1}&amp; d\beta_{2} &amp; … &amp;d\beta_{D} \\<br>\end{bmatrix}$$</p>
+<h4 id="2-求dgamma"><a href="#2-求dgamma" class="headerlink" title="(2)求dgamma"></a>(2)求dgamma</h4><p>$$<br>d\gamma_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot \frac{dY_{ij}}{d\gamma_{j}}\\<br>由Y_{i} = \gamma  \times \hat{X_{i}} + \beta可知Y_{ij} = \gamma_{j}  \times \hat{X_{ij}} + \beta_{j}，\frac{dY_{ij}}{d\gamma_{j}}=\hat{X_{ij}}\\<br>所以d\gamma_{j} = \sum_{i=1}^{m}\frac{dL}{dY_{ij}} \cdot \hat{X_{ij}}\\<br>对整个矩阵进行操作d\gamma = \sum_{i=1}^{m}\frac{dL}{dY_{i}} \cdot \hat{X_{i}} = \begin{bmatrix} d\gamma_{1}&amp; d\gamma_{2} &amp; … &amp;d\gamma_{D}<br>\end{bmatrix}$$</p>
+<h4 id="3-求dX"><a href="#3-求dX" class="headerlink" title="(3)求dX"></a>(3)求dX</h4><p>最后我们还要对X进行求导，首先我们先看下面的链式路径：<br><img src="/images/chain_batchnorm.png" alt="image"><br>$$对第i行第j列进行反向传播：\frac{dL}{dX_{ij}} = \sum_{k=1}^{m}\frac{dL}{d\hat{X_{kj}}} \cdot\frac{d\hat{X_{kj}}}{dX_{ij}} = \sum_{k=1}^{m} \sum_{l=1}^{m}(\frac{dL}{d\hat{Y_{lj}}} \cdot \frac{dY_{lj}}{d\hat{X_{kj}}})\cdot\frac{d\hat{X_{kj}}}{dX_{ij}}\\<br>由Y_{i} = \gamma  \times \hat{X_{i}} + \beta可知Y_{lj} = \gamma_{j}  \times \hat{X_{lj}} + \beta_{j}，则\frac{dY_{lj}}{d\hat{X_{kj}}}=\gamma_{j}(当l=k时)，\frac{dY_{lj}}{d\hat{X_{kj}}}=0(当l≠k时)\\<br>则\frac{dL}{dX_{ij}} = \sum_{k=1}^{m}\frac{dL}{dY_{kj}} \cdot \frac{dY_{kj}}{d\hat{X_{kj}}} \cdot\frac{d\hat{X_{kj}}}{dX_{ij}} = \sum_{k=1}^{m}\gamma_{j} \cdot \frac{dL}{dY_{kj}} \cdot\frac{d\hat{X_{kj}}}{dX_{ij}} \\<br>由\hat{X_{ij}} = \frac{X_{ij} - \mu_{j}}{\sqrt{\sigma_{j}^{2} + \varepsilon }}，\mu_{j} = \frac{1}{m}\sum_{k=1}^{m}X_{kj}，<br>\sigma_{j}^{2} = \frac{1}{m}\sum_{k=1}^{m}(X_{kj}-\mu_{j})^{2}和上图可知我们求\frac{d\hat{X_{ij}}}{dX_{ij}}的话有三条路径:\\<br>第一条路径为：\frac{d\hat{X_{kj}}}{dX_{ij}} = \left \lceil k==i \right \rfloor \cdot \frac{1}{\sqrt{\sigma_{j}^{2} + \varepsilon }}\\<br>第二条路径为：\frac{d\hat{X_{kj}}}{dX_{ij}} = \frac{d\hat{X_{kj}}}{d\mu_{j}} \cdot \frac{d\mu_{j}}{dX_{ij}}，\frac{d\hat{X_{kj}}}{d\mu_{j}} = -\frac{1}{\sqrt{\sigma_{j}^{2} + \varepsilon }},\frac{d\mu_{j}}{dX_{ij}} = \frac{1}{m}\\<br>则\frac{d\hat{X_{kj}}}{dX_{ij}} = -\frac{1}{m\sqrt{\sigma_{j}^{2} + \varepsilon }}\\<br>第三条路径为：\frac{d\hat{X_{kj}}}{dX_{ij}} = \frac{d\hat{X_{kj}}}{d\sigma_{j}^{2}} \cdot \frac{d\sigma_{j}^{2}}{dX_{ij}}，\\<br>\frac{d\hat{X_{kj}}}{d\sigma_{j}^{2}} = -\frac{X_{kj} - \mu_{j}}{2(\sigma_{j}^{2} + \varepsilon)^{\frac{3}{2}}}，\\<br>求解\frac{d\sigma_{j}^{2}}{dX_{ij}}有两个路径：<br>路径1：\frac{d\sigma_{j}^{2}}{dX_{ij}} = \frac{2}{m}(X_{ij} - \mu_{j})，路径2：\frac{d\sigma_{j}^{2}}{dX_{ij}} = \frac{d\sigma_{j}^{2}}{d\mu_{j}} \cdot \frac{d\mu_{j}}{dX_{ij}} = - \frac{2}{m}(X_{ij} - \mu_{j}) \cdot \frac{1}{m}\\<br>则\frac{d\sigma_{j}^{2}}{dX_{ij}} = \frac{d\sigma_{j}^{2}}{dX_{ij}} + \frac{d\sigma_{j}^{2}}{d\mu_{j}} \cdot \frac{d\mu_{j}}{dX_{ij}} = \frac{2}{m}(X_{ij} - \mu_{j}) + (- \frac{2}{m}(X_{ij} - \mu_{j}) \cdot \frac{1}{m}) = \frac{2}{m^{2}}(X_{ij} - \mu_{j})(m - 1)\\<br>则\frac{d\hat{X_{kj}}}{dX_{ij}} = \frac{d\hat{X_{kj}}}{d\sigma_{j}^{2}} \cdot \frac{d\sigma_{j}^{2}}{dX_{ij}} = -\frac{X_{kj} - \mu_{j}}{2(\sigma_{j}^{2} + \varepsilon)^{\frac{3}{2}}} \cdot \frac{2}{m^{2}}(X_{ij} - \mu_{j})(m - 1) = \frac{(X_{kj} - \mu_{j}) \cdot(X_{ij} - \mu_{j}) \cdot(1 - m)}{m^{2}\cdot (\sigma_{j}^{2} + \varepsilon)^{\frac{3}{2}}}\\<br>综合上述三条路径可求得\frac{dL}{dX_{ij}} = \sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{kj}}\cdot\frac{d\hat{X_{kj}}}{dX_{ij}} + \sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{kj}}\cdot\frac{d\hat{X_{kj}}}{d\mu_{j}} \cdot \frac{d\mu_{j}}{dX_{ij}} +\sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{kj}}\cdot \frac{d\hat{X_{kj}}}{d\sigma_{j}^{2}} \cdot \frac{d\sigma_{j}^{2}}{dX_{ij}}\\<br> = \gamma\cdot\frac{dL}{dY_{ij}}\cdot\frac{1}{\sqrt{\sigma_{j}^{2} + \varepsilon }} + \sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{kj}}\cdot\frac{-1}{m\sqrt{\sigma_{j}^{2} + \varepsilon }} +\sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{kj}}\cdot \frac{(X_{kj} - \mu_{j}) \cdot(X_{ij} - \mu_{j}) \cdot(1 - m)}{m^{2}\cdot (\sigma_{j}^{2} + \varepsilon)^{\frac{3}{2}}}\\<br> 对矩阵X进行整体操作:\\<br>\frac{dL}{dX} = \gamma\cdot\frac{dL}{dY}\cdot\frac{1}{\sqrt{\sigma^{2} + \varepsilon }} + \sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{k}}\cdot\frac{-1}{m\sqrt{\sigma^{2} + \varepsilon }} +\sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{k}}\cdot(X_{k} - \mu)\cdot \frac{ (X - \mu) \cdot(1 - m)}{m^{2}\cdot (\sigma^{2} + \varepsilon)^{\frac{3}{2}}}\\<br>总结一下：\\<br>d\beta = \frac{dL}{d\beta} = \sum_{i=1}^{m}\frac{dL}{dY_{i}}\\<br>d\gamma = \frac{dL}{d\gamma} = \sum_{i=1}^{m}\frac{dL}{dY_{i}}\cdot \hat{X_{i}}\\<br>dX = \frac{dL}{dX} = \gamma\cdot\frac{dL}{dY}\cdot\frac{1}{\sqrt{\sigma^{2} + \varepsilon }} + \sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{k}}\cdot\frac{-1}{m\sqrt{\sigma^{2} + \varepsilon }} +\sum_{k=1}^{m}\gamma\cdot\frac{dL}{dY_{k}}\cdot(X_{k} - \mu)\cdot \frac{ (X - \mu) \cdot(1 - m)}{m^{2}\cdot (\sigma^{2} + \varepsilon)^{\frac{3}{2}}}\\<br>$$</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/22/neural_network/" rel="next" title="全连接神经网络">
+                <i class="fa fa-chevron-left"></i> 全连接神经网络
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/28/Multiclass Support Vector Machine/" rel="prev" title="Multiclass Support Vector Machine">
+                Multiclass Support Vector Machine <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.gif"
+                alt="Lai" />
+            
+              <p class="site-author-name" itemprop="name">Lai</p>
+              <p class="site-description motion-element" itemprop="description">Thanks for visiting my blog, lucky one!!!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#bacth-normlization中的前向传播"><span class="nav-number">1.</span> <span class="nav-text">bacth normlization中的前向传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bacth-normlization中的反向传播"><span class="nav-number">2.</span> <span class="nav-text">bacth normlization中的反向传播</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-求dbeta"><span class="nav-number">2.0.1.</span> <span class="nav-text">(1)求dbeta</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-求dgamma"><span class="nav-number">2.0.2.</span> <span class="nav-text">(2)求dgamma</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-求dX"><span class="nav-number">2.0.3.</span> <span class="nav-text">(3)求dX</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lai</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
